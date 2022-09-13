@@ -47,12 +47,8 @@ echo "oc apply -f policy-osd-metrics-exporter.yaml"
 echo " oc get policy -A"
  oc get policy -A
 
-echo "We can see the Policy has been created in the test-osd-policy and then Propagated to the two HCPs"
+echo "We can see the Policy has been created in the test-osd-policy and then Propagated to the two HCPs. The current state is NonCompliant because the resources are not done creating yet"
 
-echo "We can check the subscription and see the status"
-
-echo " oc get subscriptions -A"
- oc get subscriptions -A
 
 echo " Now we check the HCP to see if all the resources have been created"
 
@@ -62,10 +58,10 @@ echo "KUBECONFIG=/tmp/kubeconfig-l-4-10-hshift-25852 oc get all -n openshift-osd
 echo "KUBECONFIG=/tmp/kubeconfig-l-4-10-hshift-13687 oc get all -n openshift-osd-metrics"
  KUBECONFIG=/tmp/kubeconfig-l-4-10-hshift-13687 oc get all -n openshift-osd-metrics
 
-echo "So the registry pod is throwing an error. Instead of editing the pod, we'll try editing the policy to see if that will be sync to the HCPs"
+echo "So the registry pod is throwing an error. There's a typo in the image-registry URL. Instead of editing the pod, we'll try editing the policy to see if that will be sync to the HCPs"
 
-echo " oc edit policy osd-metrics-exporter-subscription -n test-osd-policy"
- oc edit policy osd-metrics-exporter-subscription -n test-osd-policy
+echo " oc edit policy osd-metrics-exporter-subscription -n test-osd-policies"
+ oc edit policy osd-metrics-exporter-subscription -n test-osd-policies 
 
 echo " oc get policy -A"
  oc get policy -A
@@ -76,4 +72,16 @@ echo " KUBECONFIG=/tmp/kubeconfig-l-4-10-hshift-25852 oc get all -n openshift-os
  KUBECONFIG=/tmp/kubeconfig-l-4-10-hshift-25852 oc get all -n openshift-osd-metrics
 echo " KUBECONFIG=/tmp/kubeconfig-l-4-10-hshift-13687 oc get all -n openshift-osd-metrics"
  KUBECONFIG=/tmp/kubeconfig-l-4-10-hshift-13687 oc get all -n openshift-osd-metrics
+
+echo "With all the pods in Running state, the status of the policy should be Compliant now"
+echo " oc get policy -A"
+ oc get policy -A
+
+
+echo "Now there's an osd-metrics-exporter is running on each HCP. As long as the policies exists, if the operator is deleted from HCP, it will automatically get recreated"
+echo "KUBECONFIG=/tmp/kubeconfig-l-4-10-hshift-25852 oc delete ns openshift-osd-metrics"
+
+KUBECONFIG=/tmp/kubeconfig-l-4-10-hshift-25852 oc delete ns openshift-osd-metrics
+
+watch -tcn 1 "KUBECONFIG=/tmp/kubeconfig-l-4-10-hshift-25852 oc get all -n openshift-osd-metrics"
 
