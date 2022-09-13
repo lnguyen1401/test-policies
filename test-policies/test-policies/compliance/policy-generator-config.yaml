@@ -1,0 +1,14 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: install-compliance-operator
+policyDefaults:
+  namespace: clusters-l-4-10-hshift-25852
+  placement:
+    clusterSelectors:
+      vendor: "OpenShift"
+  remediationAction: enforce
+policies:
+  - name: install-compliance-operator
+    manifests:
+      - path: compliance-operator.yaml

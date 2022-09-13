@@ -1,0 +1,142 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+    annotations:
+        policy.open-cluster-management.io/categories: CM Configuration Management
+        policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
+        policy.open-cluster-management.io/standards: NIST SP 800-53
+    name: osd-metrics-exporter-subscription
+    namespace: test-osd-policies
+spec:
+    disabled: false
+    policy-templates:
+        - objectDefinition:
+            apiVersion: policy.open-cluster-management.io/v1
+            kind: ConfigurationPolicy
+            metadata:
+                name: osd-metrics-exporter-subscription
+            spec:
+                object-templates:
+                    - complianceType: musthave
+                      objectDefinition:
+                        apiVersion: v1
+                        kind: Namespace
+                        metadata:
+                            labels:
+                                openshift.io/cluster-monitoring: "true"
+                            name: openshift-osd-metrics
+                    - complianceType: musthave
+                      objectDefinition:
+                        apiVersion: rbac.authorization.k8s.io/v1
+                        kind: Role
+                        metadata:
+                            name: prometheus-k8s
+                            namespace: openshift-osd-metrics
+                        rules:
+                            - apiGroups:
+                                - ""
+                              resources:
+                                - services
+                                - endpoints
+                                - pods
+                              verbs:
+                                - get
+                                - list
+                                - watch
+                    - complianceType: musthave
+                      objectDefinition:
+                        apiVersion: rbac.authorization.k8s.io/v1
+                        kind: RoleBinding
+                        metadata:
+                            name: prometheus-k8s
+                            namespace: openshift-osd-metrics
+                        roleRef:
+                            kind: Role
+                            name: prometheus-k8s
+                        subjects:
+                            - kind: ServiceAccount
+                              name: prometheus-k8s
+                              namespace: openshift-monitoring
+                    - complianceType: musthave
+                      objectDefinition:
+                        apiVersion: operators.coreos.com/v1alpha1
+                        kind: CatalogSource
+                        metadata:
+                            labels:
+                                opsrc-datastore: "true"
+                                opsrc-provider: redhat
+                            name: osd-metrics-exporter-registry
+                            namespace: openshift-osd-metrics
+                        spec:
+                            affinity:
+                                nodeAffinity:
+                                    preferredDuringSchedulingIgnoredDuringExecution:
+                                        - preference:
+                                            matchExpressions:
+                                                - key: node-role.kubernetes.io/infra
+                                                  operator: Exists
+                                          weight: 1
+                            displayName: OSD Metrics Exporter
+                            icon:
+                                base64data: ""
+                                mediatype: ""
+                            image: quay.io/app-sre/osd-metrics-exporter-registryi@sha256:58d68724302cdac55ebb22184c3e6d3843fd7c1cc48dfad29a6b3d2f7a5b40ef
+                            publisher: Red Hat
+                            sourceType: grpc
+                            tolerations:
+                                - effect: NoSchedule
+                                  key: node-role.kubernetes.io/infra
+                                  operator: Exists
+                    - complianceType: musthave
+                      objectDefinition:
+                        apiVersion: operators.coreos.com/v1alpha1
+                        kind: Subscription
+                        metadata:
+                            name: osd-metrics-exporter
+                            namespace: openshift-osd-metrics
+                        spec:
+                            channel: staging
+                            image: quay.io/app-sre/osd-metrics-exporter@0d725b91398ed3db11249808d89e688e62e511bbd4a2e875ed8493ce1febdb2c
+                            name: osd-metrics-exporter
+                            source: osd-metrics-exporter-registry
+                            sourceNamespace: openshift-osd-metrics
+                    - complianceType: musthave
+                      objectDefinition:
+                        apiVersion: operators.coreos.com/v1alpha2
+                        kind: OperatorGroup
+                        metadata:
+                            name: osd-metrics-exporter
+                            namespace: openshift-osd-metrics
+                        spec:
+                            targetNamespaces:
+                                - openshift-osd-metrics
+                remediationAction: enforce
+                severity: low
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+    name: placement-osd-metrics-exporter-subscription
+    namespace: test-osd-policies
+spec:
+    clusterSelector:
+        matchExpressions:
+            - key: HCP
+              operator: In
+              values:
+                - "true"
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+    name: binding-osd-metrics-exporter-subscription
+    namespace: test-osd-policies
+placementRef:
+    apiGroup: apps.open-cluster-management.io
+    kind: PlacementRule
+    name: placement-osd-metrics-exporter-subscription
+subjects:
+    - apiGroup: policy.open-cluster-management.io
+      kind: Policy
+      name: osd-metrics-exporter-subscription

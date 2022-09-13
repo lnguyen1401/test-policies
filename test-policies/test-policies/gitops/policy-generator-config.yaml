@@ -1,0 +1,15 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: install-openshift-gitops
+policyDefaults:
+  namespace: test-osd-policies
+  placement:
+    clusterSelectors:
+      name: "clusters-l-4-10-hshift-13687"
+  remediationAction: enforce
+policies:
+  - name: install-openshift-gitops
+    manifests:
+      - path: gitops.yaml
+

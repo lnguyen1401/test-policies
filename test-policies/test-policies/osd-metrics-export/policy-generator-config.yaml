@@ -1,0 +1,14 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+    name: osd-metrics-exporter
+policyDefaults:
+    namespace: test-osd-policies
+    placement:
+        clusterSelectors:
+            HCP: "true"
+    remediationAction: enforce
+policies:
+  - name: osd-metrics-exporter-subscription
+    manifests:
+      - path: osd-metrics-exporter.yaml

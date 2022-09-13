@@ -1,0 +1,53 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+    annotations:
+        policy.open-cluster-management.io/categories: CM Configuration Management
+        policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
+        policy.open-cluster-management.io/standards: NIST SP 800-53
+    name: dedicated-admin-namespace
+    namespace: clusters-l-4-10-hshift-25852
+spec:
+    disabled: false
+    policy-templates:
+        - objectDefinition:
+            apiVersion: policy.open-cluster-management.io/v1
+            kind: ConfigurationPolicy
+            metadata:
+                name: dedicated-admin-namespace
+            spec:
+                object-templates:
+                    - complianceType: musthave
+                      objectDefinition:
+                        apiVersion: v1
+                        kind: Namespace
+                        metadata:
+                            annotations:
+                                openshift.io/node-selector: ""
+                            name: dedicated-admin
+                remediationAction: enforce
+                severity: low
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+    name: placement-dedicated-admin-namespace
+    namespace: clusters-l-4-10-hshift-25852
+spec:
+    clusterSelector:
+        matchExpressions: []
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+    name: binding-dedicated-admin-namespace
+    namespace: clusters-l-4-10-hshift-25852
+placementRef:
+    apiGroup: apps.open-cluster-management.io
+    kind: PlacementRule
+    name: placement-dedicated-admin-namespace
+subjects:
+    - apiGroup: policy.open-cluster-management.io
+      kind: Policy
+      name: dedicated-admin-namespace

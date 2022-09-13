@@ -1,0 +1,33 @@
+Script started on 2022-09-12 16:08:14-04:00
+
+┌💁  [31;1mlinnguye[0m @ 💻  [36;1mlinnguye[0m in 📁  [35;1mosd-metrics-export[0m[0;97m[0m
+└❯ #We'll look into how to deploy an OSD operator to Hypershift Hosted Controlplane with Policy
+
+┌💁  [31;1mlinnguye[0m @ 💻  [36;1mlinnguye[0m in 📁  [35;1mosd-metrics-export[0m[0;97m[0m
+└❯ #Steps i have already done before this session:
+
+┌💁  [31;1mlinnguye[0m @ 💻  [36;1mlinnguye[0m in 📁  [35;1mosd-metrics-export[0m[0;97m[0m
+└❯ #1. Install ACM into this manangement cluster
+
+┌💁  [31;1mlinnguye[0m @ 💻  [36;1mlinnguye[0m in 📁  [35;1mosd-metrics-export[0m[0;97m[0m
+└❯ oc get ns | grep open-cluster-managem,[Kent
+[01;31m[Kopen-cluster-management[m[K                            Active        14d
+[01;31m[Kopen-cluster-management[m[K-agent                      Active        13d
+[01;31m[Kopen-cluster-management[m[K-agent-addon                Active        13d
+[01;31m[Kopen-cluster-management[m[K-hub                        Active        14d
+
+┌💁  [31;1mlinnguye[0m @ 💻  [36;1mlinnguye[0m in 📁  [35;1mosd-metrics-export[0m[0;97m[0m
+└❯ 2. Imported the HCPs i created into ACM:
+bash: 2.: command not found
+
+┌💁  [31;1mlinnguye[0m @ 💻  [36;1mlinnguye[0m in 📁  [35;1mosd-metrics-export[0m[0;97m[0m
+└❯ oc get ManagedCluster -o name
+managedcluster.cluster.open-cluster-management.io/clusters-l-4-10-hshift-13687
+managedcluster.cluster.open-cluster-management.io/clusters-l-4-10-hshift-25852
+managedcluster.cluster.open-cluster-management.io/local-cluster
+
+┌💁  [31;1mlinnguye[0m @ 💻  [36;1mlinnguye[0m in 📁  [35;1mosd-metrics-export[0m[0;97m[0m
+└❯ #[Kexit
+exit
+
+Script done on 2022-09-12 16:11:33-04:00

@@ -1,0 +1,77 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+    annotations:
+        policy.open-cluster-management.io/categories: CM Configuration Management
+        policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
+        policy.open-cluster-management.io/standards: NIST SP 800-53
+    name: install-compliance-operator
+    namespace: clusters-l-4-10-hshift-25852
+spec:
+    disabled: false
+    policy-templates:
+        - objectDefinition:
+            apiVersion: policy.open-cluster-management.io/v1
+            kind: ConfigurationPolicy
+            metadata:
+                name: install-compliance-operator
+            spec:
+                object-templates:
+                    - complianceType: musthave
+                      objectDefinition:
+                        apiVersion: v1
+                        kind: Namespace
+                        metadata:
+                            name: openshift-compliance
+                    - complianceType: musthave
+                      objectDefinition:
+                        apiVersion: operators.coreos.com/v1alpha1
+                        kind: Subscription
+                        metadata:
+                            name: compliance-operator
+                            namespace: openshift-compliance
+                        spec:
+                            channel: release-0.1
+                            name: compliance-operator
+                            source: redhat-operators
+                            sourceNamespace: openshift-marketplace
+                    - complianceType: musthave
+                      objectDefinition:
+                        apiVersion: operators.coreos.com/v1
+                        kind: OperatorGroup
+                        metadata:
+                            name: compliance-operator
+                            namespace: openshift-compliance
+                        spec:
+                            targetNamespaces:
+                                - compliance-operator
+                remediationAction: enforce
+                severity: low
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+    name: placement-install-compliance-operator
+    namespace: clusters-l-4-10-hshift-25852
+spec:
+    clusterSelector:
+        matchExpressions:
+            - key: vendor
+              operator: In
+              values:
+                - OpenShift
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+    name: binding-install-compliance-operator
+    namespace: clusters-l-4-10-hshift-25852
+placementRef:
+    apiGroup: apps.open-cluster-management.io
+    kind: PlacementRule
+    name: placement-install-compliance-operator
+subjects:
+    - apiGroup: policy.open-cluster-management.io
+      kind: Policy
+      name: install-compliance-operator

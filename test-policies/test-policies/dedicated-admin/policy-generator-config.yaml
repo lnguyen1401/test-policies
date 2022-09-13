@@ -1,0 +1,12 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: create-dedicated-admin-namespace
+policyDefaults:
+  namespace: clusters-l-4-10-hshift-25852
+policies:
+  - name: dedicated-admin-namespace 
+    manifests:
+      - path: dedicated-admin-namespace.yaml
+    remediationAction: enforce
+
