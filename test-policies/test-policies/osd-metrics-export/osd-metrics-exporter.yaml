@@ -47,7 +47,7 @@ metadata:
   name: osd-metrics-exporter-registry
   namespace: openshift-osd-metrics
 spec:
-  image: quay.io/app-sre/osd-metrics-exporter-registryi@sha256:58d68724302cdac55ebb22184c3e6d3843fd7c1cc48dfad29a6b3d2f7a5b40ef
+  image: quay.io/app-sre/osd-metrics-exporter-registry@sha256:58d68724302cdac55ebb22184c3e6d3843fd7c1cc48dfad29a6b3d2f7a5b40ef
   affinity:
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:

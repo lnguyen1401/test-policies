@@ -9,6 +9,6 @@ policyDefaults:
             HCP: "true"
     remediationAction: enforce
 policies:
-  - name: osd-metrics-exporter-subscription
+  - name: osd-metrics-exporter
     manifests:
       - path: osd-metrics-exporter.yaml
