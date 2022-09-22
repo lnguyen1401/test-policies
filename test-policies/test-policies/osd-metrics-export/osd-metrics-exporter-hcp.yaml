@@ -1,0 +1,98 @@
+#apiVersion: v1
+#kind: Namespace
+#metadata:
+#  name: openshift-osd-metrics
+#  labels:
+#    openshift.io/cluster-monitoring: 'true'
+#---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: prometheus-k8s
+  namespace: clusters-l-4-10-hshift-25852
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - services
+  - endpoints
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: prometheus-k8s
+  namespace: clusters-l-4-10-hshift-25852
+roleRef:
+  kind: Role
+  name: prometheus-k8s
+subjects:
+- kind: ServiceAccount
+  name: prometheus-k8s
+  namespace: openshift-monitoring
+---
+
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  labels:
+    opsrc-datastore: "true"
+    opsrc-provider: redhat
+  name: osd-metrics-exporter-registry
+  namespace: clusters-l-4-10-hshift-25852
+spec:
+  image: quay.io/app-sre/osd-metrics-exporter-registry@sha256:58d68724302cdac55ebb22184c3e6d3843fd7c1cc48dfad29a6b3d2f7a5b40ef
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - preference:
+          matchExpressions:
+          - key: node-role.kubernetes.io/infra
+            operator: Exists
+        weight: 1
+  tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/infra
+      operator: Exists
+  displayName: OSD Metrics Exporter
+  icon:
+    base64data: ''
+    mediatype: ''
+  publisher: Red Hat
+  sourceType: grpc
+  env:
+      - name: KUBECONFIG
+        value: "/tmp/kubeconfig-l-4-10-hshift-25852"
+---
+
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: osd-metrics-exporter
+  namespace: clusters-l-4-10-hshift-25852
+spec:
+  image: quay.io/app-sre/osd-metrics-exporter@0d725b91398ed3db11249808d89e688e62e511bbd4a2e875ed8493ce1febdb2c
+  channel: staging 
+  name: osd-metrics-exporter
+  source: osd-metrics-exporter-registry
+  sourceNamespace: clusters-l-4-10-hshift-25852
+  env:
+      - name: KUBECONFIG
+        value: "/tmp/kubeconfig-l-4-10-hshift-25852"
+---
+
+apiVersion: operators.coreos.com/v1alpha2
+kind: OperatorGroup
+metadata:
+  name: osd-metrics-exporter
+  namespace: clusters-l-4-10-hshift-25852
+spec:
+  targetNamespaces:
+  - clusters-l-4-10-hshift-25852
+
