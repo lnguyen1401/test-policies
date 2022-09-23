@@ -37,7 +37,79 @@ subjects:
   name: prometheus-k8s
   namespace: openshift-monitoring
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: osd-metrics-exporter
+  namespace: clusters-l-4-10-hshift-25852
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: osd-metrics-exporter
+  namespace: clusters-l-4-10-hshift-25852
+rules:
+- apiGroups:
+  - config.openshift.io
+  resources:
+  - oauths
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+  - update
+- apiGroups:
+  - config.openshift.io
+  resources:
+  - proxies
+  - clusterversions
+  verbs:
+  - get
+  - list
+  - watch  
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - servicemonitors
+  verbs:
+  - get
+  - create
+  - update
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - daemonsets
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - services
+  - endpoints
+  - events
+  - configmaps
+  - secrets
+  verbs:
+  - '*'
+---
 
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: osd-metrics-exporter
+  namespace: clusters-l-4-10-hshift-25852
+roleRef:
+  kind: Role
+  name: osd-metrics-exporter
+subjects:
+- kind: ServiceAccount
+  name: osd-metrics-exporter
+  namespace: clusters-l-4-10-hshift-25852
+---
+---
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:

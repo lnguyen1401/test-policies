@@ -6,9 +6,12 @@ policyDefaults:
     namespace: test-osd-policies
     placement:
         clusterSelectors:
-            HCP: "true"
+            local-cluster: "true"
     remediationAction: enforce
 policies:
-  - name: osd-metrics-exporter
+  - name: osd-metrics-exporter-hcp
     manifests:
-      - path: osd-metrics-exporter.yaml
+      - path: osd-metrics-exporter-hcp.yaml
+  - name: osd-metrics-exporter-deployment
+    manifests:
+      - path: deployment.yaml
