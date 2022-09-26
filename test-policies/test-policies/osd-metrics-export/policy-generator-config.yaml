@@ -15,3 +15,4 @@ policies:
   - name: osd-metrics-exporter-deployment
     manifests:
       - path: deployment.yaml
+
