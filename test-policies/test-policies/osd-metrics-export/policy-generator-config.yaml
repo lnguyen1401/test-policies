@@ -14,4 +14,4 @@ policies:
       - path: osd-metrics-exporter-hcp.yaml
   - name: osd-metrics-exporter-deployment
     manifests:
-      - path: deployment.yaml
+      - path: deployment-with-no-KUBECONFIG-set.yaml
