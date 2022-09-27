@@ -234,6 +234,8 @@ spec:
                                         - command:
                                             - osd-metrics-exporter
                                           env:
+                                            - name: KUBECONFIG
+                                              value: /var/kubeconfig/value
                                             - name: WATCH_NAMESPACE
                                               value: ""
                                             - name: POD_NAME
@@ -245,11 +247,19 @@ spec:
                                           image: quay.io/app-sre/osd-metrics-exporter@sha256:12d28379aec834bf236b961678538908a75d203d48fae5bcd8a54adaae8e2e8d
                                           imagePullPolicy: Always
                                           name: osd-metrics-exporter
+                                          volumeMounts:
+                                            - mountPath: /var/kubeconfig
+                                              name: exporter-kubeconfig
                                     serviceAccountName: osd-metrics-exporter
                                     tolerations:
                                         - effect: NoSchedule
                                           key: node-role.kubernetes.io/infra
                                           operator: Exists
+                                    volumes:
+                                        - name: exporter-kubeconfig
+                                          secret:
+                                            defaultMode: 416
+                                            secretName: l-4-10-hshift-25852-sf8tn-kubeconfig
                 remediationAction: enforce
                 severity: low
 ---
