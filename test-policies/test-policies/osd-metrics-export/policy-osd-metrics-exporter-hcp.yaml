@@ -144,9 +144,6 @@ spec:
                                                   operator: Exists
                                           weight: 1
                             displayName: OSD Metrics Exporter
-                            env:
-                                - name: KUBECONFIG
-                                  value: /tmp/kubeconfig-l-4-10-hshift-25852
                             icon:
                                 base64data: ""
                                 mediatype: ""
@@ -166,9 +163,6 @@ spec:
                             namespace: clusters-l-4-10-hshift-25852
                         spec:
                             channel: staging
-                            env:
-                                - name: KUBECONFIG
-                                  value: /tmp/kubeconfig-l-4-10-hshift-25852
                             image: quay.io/app-sre/osd-metrics-exporter@0d725b91398ed3db11249808d89e688e62e511bbd4a2e875ed8493ce1febdb2c
                             name: osd-metrics-exporter
                             source: osd-metrics-exporter-registry

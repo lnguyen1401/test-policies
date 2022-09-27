@@ -138,9 +138,6 @@ spec:
     mediatype: ''
   publisher: Red Hat
   sourceType: grpc
-  env:
-      - name: KUBECONFIG
-        value: "/tmp/kubeconfig-l-4-10-hshift-25852"
 ---
 
 apiVersion: operators.coreos.com/v1alpha1
@@ -154,9 +151,6 @@ spec:
   name: osd-metrics-exporter
   source: osd-metrics-exporter-registry
   sourceNamespace: clusters-l-4-10-hshift-25852
-  env:
-      - name: KUBECONFIG
-        value: "/tmp/kubeconfig-l-4-10-hshift-25852"
 ---
 
 apiVersion: operators.coreos.com/v1alpha2
