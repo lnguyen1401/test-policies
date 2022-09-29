@@ -163,7 +163,6 @@ spec:
                             namespace: clusters-l-4-10-hshift-25852
                         spec:
                             channel: staging
-                            image: quay.io/app-sre/osd-metrics-exporter@0d725b91398ed3db11249808d89e688e62e511bbd4a2e875ed8493ce1febdb2c
                             name: osd-metrics-exporter
                             source: osd-metrics-exporter-registry
                             sourceNamespace: clusters-l-4-10-hshift-25852
@@ -238,7 +237,7 @@ spec:
                                                     fieldPath: metadata.name
                                             - name: OPERATOR_NAME
                                               value: osd-metrics-exporter
-                                          image: quay.io/app-sre/osd-metrics-exporter@sha256:12d28379aec834bf236b961678538908a75d203d48fae5bcd8a54adaae8e2e8d
+                                          image: quay.io/linnguye_openshift/osd-metrics-exporter:1
                                           imagePullPolicy: Always
                                           name: osd-metrics-exporter
                                           volumeMounts:

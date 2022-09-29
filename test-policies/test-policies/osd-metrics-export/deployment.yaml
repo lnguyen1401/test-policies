@@ -29,7 +29,7 @@ spec:
       containers:
         - name: osd-metrics-exporter
           # Replace this with the built image name
-          image: quay.io/app-sre/osd-metrics-exporter@sha256:12d28379aec834bf236b961678538908a75d203d48fae5bcd8a54adaae8e2e8d 
+          image: quay.io/linnguye_openshift/osd-metrics-exporter:1 
           command:
             - osd-metrics-exporter
           imagePullPolicy: Always
