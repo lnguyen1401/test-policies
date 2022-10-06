@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-healthy-threshold: "2"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-interval: "5"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-timeout: "4"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-unhealthy-threshold: "2"
+    service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: '*'
+    traffic-policy.network.alpha.openshift.io/local-with-fallback: ""
+  finalizers:
+  - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app: router
+    ingresscontroller.operator.openshift.io/owning-ingresscontroller: default
+    router: router-default
+  name: router-default
+  namespace: openshift-ingress
+  ownerReferences:
+  - apiVersion: apps/v1
+    controller: true
+    kind: Deployment
+    name: router-default
+    uid: 59380dd3-b8e5-434c-8945-c29c61a8f92e
+  resourceVersion: "1183788"
+  uid: 17fc9aac-6feb-421a-b67c-1166a88ade3d
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 172.31.133.198
+  externalTrafficPolicy: Local
+  healthCheckNodePort: 31674
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    nodePort: 30332
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: https
+    nodePort: 32018
+    port: 443
+    protocol: TCP
+    targetPort: https
+  selector:
+    ingresscontroller.operator.openshift.io/deployment-ingresscontroller: default
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - hostname: a17fc9aac6feb421ab67c1166a88ade3-1061847544.us-east-1.elb.amazonaws.com

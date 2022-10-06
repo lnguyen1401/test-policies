@@ -1,0 +1,17 @@
+ apiVersion: policy.open-cluster-management.io/v1
+ kind: PolicyGenerator
+ metadata:
+     name: delete-old-svc
+ policyDefaults:
+     namespace: test-osd-policies
+     placement:
+         clusterSelectors:
+             HCP: "true"
+     remediationAction: enforce
+     complianceType: "mustnothave"
+ policies:
+   - name: delete-old-svc-policy
+     manifests:
+       - path: svc-1.yaml 
+ 
+

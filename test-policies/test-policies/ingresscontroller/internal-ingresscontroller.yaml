@@ -1,0 +1,26 @@
+apiVersion: operator.openshift.io/v1
+kind: IngressController
+metadata:
+  labels:
+    hypershift.io/managed: "true"
+  name: default
+  namespace: openshift-ingress-operator
+spec:
+  defaultCertificate:
+    name: default-ingress-cert
+  domain: apps.linnguye-hshift-13987.c4yo.s1.devshift.org
+  endpointPublishingStrategy:
+    loadBalancer:
+     providerParameters:
+       aws:
+         type: Classic
+       type: AWS
+     scope: Internal
+    type: LoadBalancerService
+  httpCompression: {}
+  httpEmptyRequestsPolicy: Respond
+  httpErrorCodePages:
+    name: ""
+  replicas: 1
+  tuningOptions: {}
+  unsupportedConfigOverrides: null

@@ -1,0 +1,204 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+    annotations:
+        policy.open-cluster-management.io/categories: CM Configuration Management
+        policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
+        policy.open-cluster-management.io/standards: NIST SP 800-53
+    name: toggle-ingresscontroller
+    namespace: test-osd-policies
+spec:
+    disabled: false
+    policy-templates:
+        - objectDefinition:
+            apiVersion: policy.open-cluster-management.io/v1
+            kind: ConfigurationPolicy
+            metadata:
+                name: toggle-ingresscontroller
+            spec:
+                evaluationInterval:
+                    noncompliant: never
+                object-templates:
+                    - complianceType: mustnothave
+                      objectDefinition:
+                        apiVersion: operator.openshift.io/v1
+                        kind: IngressController
+                        metadata:
+                            creationTimestamp: "2022-10-04T16:41:33Z"
+                            finalizers:
+                                - ingresscontroller.operator.openshift.io/finalizer-ingresscontroller
+                            generation: 1
+                            labels:
+                                hypershift.io/managed: "true"
+                            name: default
+                            namespace: openshift-ingress-operator
+                            resourceVersion: "8312"
+                            uid: 5561d6f2-ec68-48d6-b26a-5e8595de07c4
+                        spec:
+                            clientTLS:
+                                clientCA:
+                                    name: ""
+                                clientCertificatePolicy: ""
+                            defaultCertificate:
+                                name: default-ingress-cert
+                            domain: apps.linnguye-hshift-13987.c4yo.s1.devshift.org
+                            endpointPublishingStrategy:
+                                loadBalancer:
+                                    providerParameters:
+                                        aws:
+                                            type: Classic
+                                        type: AWS
+                                    scope: Internal
+                                type: LoadBalancerService
+                            httpCompression: {}
+                            httpEmptyRequestsPolicy: Respond
+                            httpErrorCodePages:
+                                name: ""
+                            replicas: 1
+                            tuningOptions: {}
+                            unsupportedConfigOverrides: null
+                remediationAction: enforce
+                severity: low
+        - objectDefinition:
+            apiVersion: policy.open-cluster-management.io/v1
+            kind: ConfigurationPolicy
+            metadata:
+                name: toggle-ingresscontroller2
+            spec:
+                evaluationInterval:
+                    compliant: never
+                object-templates:
+                    - complianceType: musthave
+                      objectDefinition:
+                        apiVersion: operator.openshift.io/v1
+                        kind: IngressController
+                        metadata:
+                            creationTimestamp: "2022-10-04T16:41:33Z"
+                            finalizers:
+                                - ingresscontroller.operator.openshift.io/finalizer-ingresscontroller
+                            generation: 1
+                            labels:
+                                hypershift.io/managed: "true"
+                            name: default
+                            namespace: openshift-ingress-operator
+                            resourceVersion: "8312"
+                            uid: 5561d6f2-ec68-48d6-b26a-5e8595de07c4
+                        spec:
+                            clientTLS:
+                                clientCA:
+                                    name: ""
+                                clientCertificatePolicy: ""
+                            defaultCertificate:
+                                name: default-ingress-cert
+                            domain: apps.linnguye-hshift-13987.c4yo.s1.devshift.org
+                            endpointPublishingStrategy:
+                                loadBalancer:
+                                    providerParameters:
+                                        aws:
+                                            type: Classic
+                                        type: AWS
+                                    scope: External
+                                type: LoadBalancerService
+                            httpCompression: {}
+                            httpEmptyRequestsPolicy: Respond
+                            httpErrorCodePages:
+                                name: ""
+                            replicas: 1
+                            tuningOptions: {}
+                            unsupportedConfigOverrides: null
+                remediationAction: enforce
+                severity: low
+        - objectDefinition:
+            apiVersion: policy.open-cluster-management.io/v1
+            kind: ConfigurationPolicy
+            metadata:
+                name: toggle-ingresscontroller3
+            spec:
+                evaluationInterval:
+                    noncompliant: never
+                object-templates:
+                    - complianceType: mustnothave
+                      objectDefinition:
+                        apiVersion: v1
+                        kind: Service
+                        metadata:
+                            annotations:
+                                service.beta.kubernetes.io/aws-load-balancer-healthcheck-healthy-threshold: "2"
+                                service.beta.kubernetes.io/aws-load-balancer-healthcheck-interval: "5"
+                                service.beta.kubernetes.io/aws-load-balancer-healthcheck-timeout: "4"
+                                service.beta.kubernetes.io/aws-load-balancer-healthcheck-unhealthy-threshold: "2"
+                                service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+                                service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: '*'
+                                traffic-policy.network.alpha.openshift.io/local-with-fallback: ""
+                            finalizers:
+                                - service.kubernetes.io/load-balancer-cleanup
+                            labels:
+                                app: router
+                                ingresscontroller.operator.openshift.io/owning-ingresscontroller: default
+                                router: router-default
+                            name: router-default
+                            namespace: openshift-ingress
+                            ownerReferences:
+                                - apiVersion: apps/v1
+                                  controller: true
+                                  kind: Deployment
+                                  name: router-default
+                                  uid: 9b8f1ed2-7360-49c4-ac9f-39c8bd74b402
+                            resourceVersion: "79462"
+                            uid: 8fa94499-9fd9-458d-aba6-4f63c88edc94
+                        spec:
+                            allocateLoadBalancerNodePorts: true
+                            clusterIP: 172.31.197.109
+                            clusterIPs:
+                                - 172.31.197.109
+                            externalTrafficPolicy: Local
+                            healthCheckNodePort: 30302
+                            internalTrafficPolicy: Cluster
+                            ipFamilies:
+                                - IPv4
+                            ipFamilyPolicy: SingleStack
+                            ports:
+                                - name: http
+                                  nodePort: 32480
+                                  port: 80
+                                  protocol: TCP
+                                  targetPort: http
+                                - name: https
+                                  nodePort: 31717
+                                  port: 443
+                                  protocol: TCP
+                                  targetPort: https
+                            selector:
+                                ingresscontroller.operator.openshift.io/deployment-ingresscontroller: default
+                            sessionAffinity: None
+                            type: LoadBalancer
+                remediationAction: enforce
+                severity: low
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+    name: placement-toggle-ingresscontroller
+    namespace: test-osd-policies
+spec:
+    clusterSelector:
+        matchExpressions:
+            - key: HCP
+              operator: In
+              values:
+                - "true"
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+    name: binding-toggle-ingresscontroller
+    namespace: test-osd-policies
+placementRef:
+    apiGroup: apps.open-cluster-management.io
+    kind: PlacementRule
+    name: placement-toggle-ingresscontroller
+subjects:
+    - apiGroup: policy.open-cluster-management.io
+      kind: Policy
+      name: toggle-ingresscontroller

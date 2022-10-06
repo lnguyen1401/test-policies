@@ -1,0 +1,31 @@
+ apiVersion: policy.open-cluster-management.io/v1
+ kind: PolicyGenerator
+ metadata:
+     name: toggle-ingresscontroller-reverse
+ policyDefaults:
+     namespace: test-osd-policies
+     placement:
+         clusterSelectors:
+             HCP: "true"
+     remediationAction: enforce
+     consolidateManifests: false
+ policies:
+   - name: toggle-ingresscontroller-reserve
+     manifests:
+       - path: external-ingresscontroller.yaml
+         complianceType: "mustnothave"
+         evaluationInterval:
+             compliant: never
+       - path: internal-ingresscontroller.yaml
+         complianceType: "musthave"
+         evaluationInterval:
+             compliant: never
+       - path: svc-1.yaml
+         complianceType: "mustnothave"
+         evaluationInterval:
+             compliant: never
+       
+
+             
+ 
+

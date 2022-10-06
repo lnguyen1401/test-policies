@@ -1,0 +1,77 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+    annotations:
+        policy.open-cluster-management.io/categories: CM Configuration Management
+        policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
+        policy.open-cluster-management.io/standards: NIST SP 800-53
+    name: create-new-ingresscontroller-policy
+    namespace: test-osd-policies
+spec:
+    disabled: false
+    policy-templates:
+        - objectDefinition:
+            apiVersion: policy.open-cluster-management.io/v1
+            kind: ConfigurationPolicy
+            metadata:
+                name: create-new-ingresscontroller-policy
+            spec:
+                object-templates:
+                    - complianceType: musthave
+                      objectDefinition:
+                        apiVersion: operator.openshift.io/v1
+                        kind: IngressController
+                        metadata:
+                            labels:
+                                hypershift.io/managed: "true"
+                            name: default
+                            namespace: openshift-ingress-operator
+                        spec:
+                            defaultCertificate:
+                                name: default-ingress-cert
+                            domain: apps.linnguye-hshift-13987.c4yo.s1.devshift.org
+                            endpointPublishingStrategy:
+                                loadBalancer:
+                                    providerParameters:
+                                        aws:
+                                            type: Classic
+                                        type: AWS
+                                    scope: Internal
+                                type: LoadBalancerService
+                            httpCompression: {}
+                            httpEmptyRequestsPolicy: Respond
+                            httpErrorCodePages:
+                                name: ""
+                            replicas: 1
+                            tuningOptions: {}
+                            unsupportedConfigOverrides: null
+                remediationAction: enforce
+                severity: low
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+    name: placement-create-new-ingresscontroller-policy
+    namespace: test-osd-policies
+spec:
+    clusterSelector:
+        matchExpressions:
+            - key: HCP
+              operator: In
+              values:
+                - "true"
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+    name: binding-create-new-ingresscontroller-policy
+    namespace: test-osd-policies
+placementRef:
+    apiGroup: apps.open-cluster-management.io
+    kind: PlacementRule
+    name: placement-create-new-ingresscontroller-policy
+subjects:
+    - apiGroup: policy.open-cluster-management.io
+      kind: Policy
+      name: create-new-ingresscontroller-policy
