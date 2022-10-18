@@ -1,0 +1,20 @@
+ apiVersion: policy.open-cluster-management.io/v1
+ kind: PolicyGenerator
+ metadata:
+     name: create-new-ingresscontroller
+ policyDefaults:
+     namespace: test-osd-policies
+     placement:
+         clusterSelectors:
+             HCP: "true"
+     remediationAction: enforce
+ policies:
+   - name: create-new-ingresscontroller
+     manifests:
+       - path: internal-ingresscontroller.yaml
+         complianceType: "musthave"
+       
+
+             
+ 
+

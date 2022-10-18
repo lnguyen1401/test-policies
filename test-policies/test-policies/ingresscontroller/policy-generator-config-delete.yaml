@@ -1,0 +1,20 @@
+ apiVersion: policy.open-cluster-management.io/v1
+ kind: PolicyGenerator
+ metadata:
+     name: delete-old-ingresscontroller
+     policyDefaults:
+     namespace: test-osd-policies
+     placement:
+         clusterSelectors:
+             HCP: "true"
+     remediationAction: enforce
+ policies:
+   - name: create-new-ingresscontroller
+     manifests:
+       - path: external-ingresscontroller.yaml
+         complianceType: "mustnothave"
+       
+
+             
+ 
+
