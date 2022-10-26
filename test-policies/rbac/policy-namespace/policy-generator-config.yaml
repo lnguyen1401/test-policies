@@ -1,0 +1,15 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+    name: create-namespace-for-policies
+policyDefaults:
+    namespace: open-cluster-management
+    placement:
+        clusterSelectors:
+            local-cluster: "true"
+    remediationAction: enforce
+    pruneObjectBehavior: "DeleteIfCreated"
+policies:
+  - name: create-namespace-for-policies
+    manifests:
+      - path: policy-namespace.yaml

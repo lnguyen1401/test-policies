@@ -1,0 +1,16 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+    name: cluster-admin-rolebinding
+policyDefaults:
+    namespace: acm-policies
+    placement:
+        clusterSelectors:
+            api.openshift.com/hypershift: "true"
+    remediationAction: enforce
+    pruneObjectBehavior: "DeleteIfCreated"
+policies:
+    - name: cluster-admin
+      manifests:
+          - path: cluster-admin-role-binding.yaml
+

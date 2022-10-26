@@ -1,0 +1,17 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+    name: dedicated-admin-config
+policyDefaults:
+    namespace: acm-policies
+    placement:
+        clusterSelectors:
+            api.openshift.com/hypershift: "true"
+    remediationAction: enforce
+    pruneObjectBehavior: "DeleteIfCreated"
+policies:
+    - name: dedicated-admin-rbac
+      manifests:
+          - path: /home/linnguye/git/test-policies/rbac/dedicated-admins/configs
+
+

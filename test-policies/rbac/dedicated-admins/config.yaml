@@ -1,0 +1,4 @@
+deploymentMode: "SelectorSyncSet"
+selectorSyncSet:
+  matchLabels:
+      ext-hypershift.openshift.io/cluster-type: service-cluster
