@@ -7,7 +7,7 @@ metadata:
         policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
         policy.open-cluster-management.io/standards: NIST SP 800-53
     name: create-namespace-for-policies
-    namespace: open-cluster-management
+    namespace: redhat-open-cluster-management
 spec:
     disabled: false
     policy-templates:
@@ -31,7 +31,7 @@ apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
     name: placement-create-namespace-for-policies
-    namespace: open-cluster-management
+    namespace: redhat-open-cluster-management
 spec:
     clusterSelector:
         matchExpressions:
@@ -44,7 +44,7 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
     name: binding-create-namespace-for-policies
-    namespace: open-cluster-management
+    namespace: redhat-open-cluster-management
 placementRef:
     apiGroup: apps.open-cluster-management.io
     kind: PlacementRule

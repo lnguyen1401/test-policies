@@ -3,7 +3,7 @@ kind: PolicyGenerator
 metadata:
     name: create-namespace-for-policies
 policyDefaults:
-    namespace: open-cluster-management
+    namespace: redhat-open-cluster-management
     placement:
         clusterSelectors:
             local-cluster: "true"

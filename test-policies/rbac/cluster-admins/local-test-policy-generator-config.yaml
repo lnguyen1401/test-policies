@@ -3,10 +3,10 @@ kind: PolicyGenerator
 metadata:
     name: cluster-admin-rolebinding
 policyDefaults:
-    namespace: acm-policies
+    namespace: openshift-rbac-policies
     placement:
         clusterSelectors:
-            api.openshift.com/hypershift: "true"
+            hypershift.open-cluster-management.io/hosted-cluster: "true"
     remediationAction: enforce
     pruneObjectBehavior: "DeleteIfCreated"
 policies:

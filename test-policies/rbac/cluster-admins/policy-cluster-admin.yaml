@@ -7,7 +7,7 @@ metadata:
         policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
         policy.open-cluster-management.io/standards: NIST SP 800-53
     name: cluster-admin
-    namespace: acm-policies
+    namespace: openshift-rbac-policies
 spec:
     disabled: false
     policy-templates:
@@ -39,11 +39,11 @@ apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
     name: placement-cluster-admin
-    namespace: acm-policies
+    namespace: openshift-rbac-policies
 spec:
     clusterSelector:
         matchExpressions:
-            - key: api.openshift.com/hypershift
+            - key: hypershift.open-cluster-management.io/hosted-cluster
               operator: In
               values:
                 - "true"
@@ -52,7 +52,7 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
     name: binding-cluster-admin
-    namespace: acm-policies
+    namespace: openshift-rbac-policies
 placementRef:
     apiGroup: apps.open-cluster-management.io
     kind: PlacementRule
